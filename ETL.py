@@ -15,7 +15,10 @@ from tqdm import tqdm
 
 warnings.filterwarnings("ignore")
 
+# modelo de embedding
 embedd = SentenceTransformer('all-MiniLM-L6-v2')
+
+# acesso ao qdrant no docker
 client = QdrantClient(url="http://localhost:6333")
 
 """link dos vinhos https://www.kaggle.com/datasets/zynicide/wine-reviews"""
@@ -36,6 +39,8 @@ vinhos = vinhos.dropna(subset=['country', 'price', 'variety'])
 vinhos['price'] = pd.to_numeric(vinhos['price'], errors='coerce')
 vinhos['points'] = pd.to_numeric(vinhos['points'], downcast='integer', errors='coerce')
 
+print(f'tamanho do dataframe {vinhos.shape} \n suas colunas: {vinhos.columns.tolist()}')
+
 ### criando a coleção
 if "vinhos_analise_rag" not in [col.name for col in client.get_collections().collections]:
     client.create_collection(
@@ -45,7 +50,6 @@ if "vinhos_analise_rag" not in [col.name for col in client.get_collections().col
             distance=models.Distance.COSINE,
         ),
     )
-
 
 ### gerando o documento para o banco
 class Document:
