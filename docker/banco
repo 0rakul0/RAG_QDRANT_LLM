@@ -1,0 +1,10 @@
+https://hub.docker.com/r/qdrant/qdrant/tags?page=1&ordering=last_updated
+https://github.com/qdrant/qdrant/tree/master
+
+docker pull qdrant/qdrant
+
+docker run -p 6333:6333 -v $(pwd)/path/to/data:/qdrant/storage qdrant/qdrant
+
+ou executar o comando do docker_compose
+
+caminho padrão localhost:6333
