@@ -1,6 +1,4 @@
-# README.md
-
-## Projeto de ETL para RAG utilizando Qdrant e LLM
+# Projeto de ETL para RAG utilizando Qdrant e LLM
 
 ### Descrição do Projeto
 
