@@ -21,7 +21,7 @@ def search_qdr(query):
 # busca semantica com metadados
 def search_qdr2(query,pais,valorMin,valorMax,pointMin,pointMax):
     hits = cliente.search(
-        collection_name="vinhos_for_rag",
+        collection_name="vinhos_analise_rag",
         query_vector=embedd.encode(query).tolist(),
         query_filter=models.Filter(
             must=[

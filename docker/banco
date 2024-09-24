@@ -5,6 +5,6 @@ docker pull qdrant/qdrant
 
 docker run -p 6333:6333 -v $(pwd)/path/to/data:/qdrant/storage qdrant/qdrant
 
-ou executar o comando do docker_compose
+ou executar o comando do docker-compose up dentro da pasta docker
 
 caminho padrão localhost:6333

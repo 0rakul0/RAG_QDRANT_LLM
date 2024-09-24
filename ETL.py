@@ -96,9 +96,10 @@ def gera_banco():
         ]
         ## joga a informação no banco
         client.upload_points(
-            collection_name="vinhos_for_rag",
+            collection_name="vinhos_analise_rag",
             points=points
         )
+
         logging.info("Dados enviados com sucesso para o Qdrant.")
     except Exception as e:
         logging.error(f"Erro ao processar dados: {e}")
