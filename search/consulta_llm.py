@@ -1,12 +1,12 @@
 import warnings
 import nest_asyncio
-from langchain.callbacks.tracers import ConsoleCallbackHandler
 from langchain.chains.query_constructor.base import AttributeInfo
 from langchain.retrievers.self_query.base import SelfQueryRetriever
-from langchain_community.llms import Ollama
-from langchain_community.vectorstores import Qdrant
-from qdrant_client import QdrantClient
 from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain.callbacks.tracers import ConsoleCallbackHandler
+from langchain_community.vectorstores import Qdrant
+from langchain_community.llms import Ollama
+from qdrant_client import QdrantClient
 
 nest_asyncio.apply()
 
@@ -21,14 +21,19 @@ llm = Ollama(
 )
 
 # chama o encoder
-embedd = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')
+embeddings = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')
 
 # chama o banco
 cliente = QdrantClient(url="http://localhost:6333")
-vectorstore = Qdrant(client=cliente, collection_name="vinhos_analise_rag", embeddings=embedd)
+vectorstore = Qdrant(client=cliente, collection_name="vinhos_analise_rag", embeddings=embeddings)
 
 # descrição das colunas
 metadata_field_info = [
+    AttributeInfo(
+        name="title",
+        description="descrição do vinho",
+        type="string"
+    ),
     AttributeInfo(
         name="country",
         description="O país de onde o vinho é proveniente",
@@ -51,18 +56,18 @@ metadata_field_info = [
     ),
 ]
 
-document_contents = "Breve descrição do vinho"
+document_content_description = "Breve descrição do vinho"
 
 # passando as informações para o llm consultar no banco
-retriver = SelfQueryRetriever.from_llm(
-    llm=llm,
-    vectorstore=vectorstore,
-    document_contents=document_contents,
-    metadata_field_info=metadata_field_info
+retriever = SelfQueryRetriever.from_llm(
+    llm,
+    vectorstore,
+    document_content_description,
+    metadata_field_info
 )
 
 # dá para substituir pelo input e deixar dinamico ou até mesmo usar o Streamlit para gerar uma página de pesquisa
-response = retriver.invoke("Quais vinhos dos US têm preço entre 15 e 30 e pontos acima de 90")
+response = retriever.invoke("Quais vinhos dos US têm preço entre 15 e 30 e pontos acima de 90")
 
 if response != None:
     for res in response:
